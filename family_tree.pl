@@ -35,7 +35,7 @@ parent(tom, frank_).
 parent(tom, andrew).
 
 %----------------------------------------------
-% Add gender to everyone
+% Adds gender to everyone
 
 male(antonio).
 male(vito).
@@ -65,17 +65,17 @@ female(mary).
 female(francessa).
 
 %----------------------------------------------
-% Define child relationship
+% Defines child relationship
 
-child(X,Y) :-
+child(X, Y) :-
     parent(Y,X).
 
-daughter(X,Y) :-
+daughter(X, Y) :-
     parent(Y,X),
     female(X).
 
-son(X,Y) :-
-    parent(Y,X),
+son(X, Y) :-
+    parent(Y, X),
     male(X).
 
 children(X, Children) :-
@@ -85,6 +85,27 @@ children(X, Children) :-
 children(X, Children) :-
 	not(setof(Y, parent(X,Y), Children)),		% If not in the list, children is unknown.
 	Children = none.							% '=' assigns parents to string 'unknown'
+
+%----------------------------------------------
+% Defines parents relationship
+
+mother(X, Y) :-
+    parent(X, Y),
+    female(X).
+
+father(X, Y) :-
+    parent(X, Y),
+    male(X).
+
+parents(X, Parents) :-
+	setof(Y, parent(Y, X), Parents),
+	!.
+
+parents(X, Parents) :-
+	not(setof(Y, parent(Y, X), Parents)),		
+	Parents = unknown.	
+
+
 
 
 
