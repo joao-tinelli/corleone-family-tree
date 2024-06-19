@@ -105,6 +105,34 @@ parents(X, Parents) :-
 	not(setof(Y, parent(Y, X), Parents)),		
 	Parents = unknown.	
 
+%----------------------------------------------
+% Defines siblings relationship
+
+sibling(X, Y) :-
+    parent(Z, X),
+    parent(Z, Y),
+    X \= Y.
+
+list_siblings(X, Siblings) :-
+	setof(Y, sibling(X,Y), Siblings);			% Creates list of all siblings, excluding duplicates. 
+	Siblings = none.							% If no siblings, returns none.
+
+siblings(X, Y) :-
+	list_siblings(X, Siblings),
+	member(Y, Siblings).						% Checks if the queried sibling is a member of the
+												% list of siblings for that person.
+brother(X, Y) :-
+    male(X),
+    siblings(X, Y).
+
+sister(X, Y) :-
+    female(X),
+    siblings(X, Y).
+
+
+
+
+
 
 
 
