@@ -33,6 +33,59 @@ parent(tom, theresa).
 parent(tom, frank_).
 parent(tom, andrew).
 
+% Add gender to database
+male(antonio).
+male(vito).
+male(michael).
+male(sonny).
+male(fredo).
+male(tom).
+male(carlo).
+male(anthony).
+male(vincent).
+male(santino_jr).
+male(frank).
+male(victor).
+male(michael_francis).
+male(frank_).
+male(andrew).
+female(signora).
+female(carmella).
+female(connie).
+female(kay).
+female(apollonia).
+female(lucy).
+female(sandra).
+female(deanna).
+female(theresa).
+female(mary).
+female(francessa).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
