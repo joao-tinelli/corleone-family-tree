@@ -3,6 +3,7 @@
 %----------------------------------------------
 
 % Parent(X,Y) -: indicates that X is the parent of Y
+
 parent(signora, vito).
 parent(antonio, vito).
 parent(vito, michael).
@@ -33,7 +34,9 @@ parent(tom, theresa).
 parent(tom, frank_).
 parent(tom, andrew).
 
-% Add gender to database
+%----------------------------------------------
+% Add gender to everyone
+
 male(antonio).
 male(vito).
 male(michael).
@@ -60,6 +63,28 @@ female(deanna).
 female(theresa).
 female(mary).
 female(francessa).
+
+%----------------------------------------------
+% Define child relationship
+
+child(X,Y) :-
+    parent(Y,X).
+
+daughter(X,Y) :-
+    parent(Y,X),
+    female(X).
+
+son(X,Y) :-
+    parent(Y,X),
+    male(X).
+
+children(X, Children) :-
+	setof(Y, parent(X,Y), Children),
+	!.
+
+children(X, Children) :-
+	not(setof(Y, parent(X,Y), Children)),		% If not in the list, children is unknown.
+	Children = none.							% '=' assigns parents to string 'unknown'
 
 
 
