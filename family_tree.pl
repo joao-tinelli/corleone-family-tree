@@ -83,8 +83,8 @@ children(X, Children) :-
 	!.
 
 children(X, Children) :-
-	not(setof(Y, parent(X,Y), Children)),		% If not in the list, children is unknown.
-	Children = none.							% '=' assigns parents to string 'unknown'
+	not(setof(Y, parent(X,Y), Children)),		 % If not in the list, children is unknown.
+	Children = none.							 % '=' assigns parents to string 'unknown'
 
 %----------------------------------------------
 % Defines parents relationship
@@ -114,13 +114,13 @@ sibling(X, Y) :-
     X \= Y.
 
 list_siblings(X, Siblings) :-
-	setof(Y, sibling(X,Y), Siblings);			% Creates list of all siblings, excluding duplicates. 
-	Siblings = none.							% If no siblings, returns none.
+	setof(Y, sibling(X,Y), Siblings);			 % Creates list of all siblings, excluding duplicates. 
+	Siblings = none.							 % If no siblings, returns none.
 
 siblings(X, Y) :-
 	list_siblings(X, Siblings),
-	member(Y, Siblings).						% Checks if the queried sibling is a member of the
-												% list of siblings for that person.
+	member(Y, Siblings).						 % Checks if the queried sibling is a member of the
+												 % list of siblings for that person.
 brother(X, Y) :-
     male(X),
     siblings(X, Y).
@@ -157,12 +157,74 @@ grandmother(X, Y) :-
     parent(Z, Y),
     parent(X, Z).
 
-ancestor(X, Y) :-                % Base case
+ancestor(X, Y) :-                                % Base case
     parent(X, Z).
 
-ancestor(X, Y) :-                % Recursive case
+ancestor(X, Y) :-                                % Recursive case
     parent(X, Z),
     ancestor(Z, Y).
+
+%----------------------------------------------
+% Defines ancestors and descendants
+
+ancestors(X, Ancestor_of) :-
+	findall(A, ancestor(X, A), Ancestor_of).	 % Returns a list of all results for ancestor(X, Y).
+
+descendant(X, Y) :-
+	ancestor(Y, X).
+
+descendants(X, Descendant_of) :-
+	findall(A, descendant(X, A), Descendant_of). % Returns a list of all results for descendant(X, Y).
+
+%----------------------------------------------
+% Finds relationship between
+
+relationship(X, Y) :-
+    father(X, Y),
+    format("~w is the father of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    mother(X, Y),
+    format("~w is the mother of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    son(X, Y),
+    format("~w is the son of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    daughter(X, Y),
+    format("~w is the daughter of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    brother(X, Y),
+    format("~w is the brother of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    sister(X, Y),
+    format("~w is the sister of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    uncle(X, Y),
+    format("~w is the uncle of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    aunt(X, Y),
+    format("~w is the aunt of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    grandfather(X, Y),
+    format("~w is the grandfather of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    grandmother(X, Y),
+    format("~w is the grandmother of ~w", [X, Y]), nl.
+
+relationship(X, Y) :-
+    cousin(X, Y),
+    format("~w is the cousing of ~w", [X, Y]), nl.
+
+
+
 
 
 
