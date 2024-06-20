@@ -16,20 +16,14 @@ parent(carmella, sonny).
 parent(carmella, connie).
 parent(carmella, fredo).
 parent(carmella, tom).
-parent(michael, kay).
-parent(michael, apollonia).
 parent(michael, anthony).
 parent(michael, mary).
-parent(sonny, lucy).
-parent(sonny, sandra).
 parent(sonny, vincent).
 parent(sonny, santino_jr).
 parent(sonny, francessa).
 parent(sonny, frank).
-parent(connie, carlo).
 parent(connie, victor).
 parent(connie, michael_francis).
-parent(fredo, deanna).
 parent(tom, theresa).
 parent(tom, frank_).
 parent(tom, andrew).
@@ -82,9 +76,8 @@ children(X, Children) :-
 	setof(Y, parent(X,Y), Children),
 	!.
 
-children(X, Children) :-
-	not(setof(Y, parent(X,Y), Children)),		 % If not in the list, children is unknown.
-	Children = none.							 % '=' assigns parents to string 'unknown'
+children(X, none) :-
+	not(setof(Y, parent(X,Y), _)). % If no children, returns none
 
 %----------------------------------------------
 % Defines parents relationship
@@ -101,9 +94,8 @@ parents(X, Parents) :-
 	setof(Y, parent(Y, X), Parents),
 	!.
 
-parents(X, Parents) :-
-	not(setof(Y, parent(Y, X), Parents)),		
-	Parents = unknown.	
+parents(X, unknown) :-
+	not(setof(Y, parent(Y, X), _)).
 
 %----------------------------------------------
 % Defines siblings relationship
@@ -114,13 +106,15 @@ sibling(X, Y) :-
     X \= Y.
 
 list_siblings(X, Siblings) :-
-	setof(Y, sibling(X,Y), Siblings);			 % Creates list of all siblings, excluding duplicates. 
-	Siblings = none.							 % If no siblings, returns none.
+	setof(Y, sibling(X,Y), Siblings), % Creates list of all siblings, excluding duplicates.
+	!.
+
+list_siblings(_, none). % If no siblings, returns none
 
 siblings(X, Y) :-
 	list_siblings(X, Siblings),
-	member(Y, Siblings).						 % Checks if the queried sibling is a member of the
-												 % list of siblings for that person.
+	member(Y, Siblings). % Checks if the queried sibling is a member of the list of siblings for that person.
+
 brother(X, Y) :-
     male(X),
     siblings(X, Y).
@@ -137,15 +131,15 @@ cousin(X, Y) :-
     parent(B, Y),
     sibling(A, B).
 
-uncle (X, Y) :-
+uncle(X, Y) :-
     male(X),
     parent(A, Y),
     sibling(A, X).
 
-aunt (X, Y) :-
+aunt(X, Y) :-
     female(X),
     parent(A, Y),
-    sibling(X, A).
+    sibling(A, X).
 
 grandfather(X, Y) :-
     male(X),
@@ -157,10 +151,10 @@ grandmother(X, Y) :-
     parent(Z, Y),
     parent(X, Z).
 
-ancestor(X, Y) :-                                % Base case
-    parent(X, Z).
+ancestor(X, Y) :- % Base case
+    parent(X, Y).
 
-ancestor(X, Y) :-                                % Recursive case
+ancestor(X, Y) :- % Recursive case
     parent(X, Z),
     ancestor(Z, Y).
 
@@ -168,13 +162,13 @@ ancestor(X, Y) :-                                % Recursive case
 % Defines ancestors and descendants
 
 ancestors(X, Ancestor_of) :-
-	findall(A, ancestor(X, A), Ancestor_of).	 % Returns a list of all results for ancestor(X, Y).
+	findall(A, ancestor(X, A), Ancestor_of). % Returns a list of all results for ancestor(X, Y).
 
 descendant(X, Y) :-
 	ancestor(Y, X).
 
 descendants(X, Descendant_of) :-
-	findall(A, descendant(X, A), Descendant_of). % Returns a list of all results for descendant(X, Y).
+	findall(D, descendant(X, D), Descendant_of). % Returns a list of all results for descendant(X, Y).
 
 %----------------------------------------------
 % Finds relationship between
@@ -221,62 +215,4 @@ relationship(X, Y) :-
 
 relationship(X, Y) :-
     cousin(X, Y),
-    format("~w is the cousing of ~w", [X, Y]), nl.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    format("~w is the cousin of ~w", [X, Y]), nl.
