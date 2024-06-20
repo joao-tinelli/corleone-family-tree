@@ -129,6 +129,43 @@ sister(X, Y) :-
     female(X),
     siblings(X, Y).
 
+%----------------------------------------------
+% Defines others relationship
+
+cousin(X, Y) :-
+    parent(A, X),
+    parent(B, Y),
+    sibling(A, B).
+
+uncle (X, Y) :-
+    male(X),
+    parent(A, Y),
+    sibling(A, X).
+
+aunt (X, Y) :-
+    female(X),
+    parent(A, Y),
+    sibling(X, A).
+
+grandfather(X, Y) :-
+    male(X),
+    parent(Z, Y),
+    parent(X, Z).
+
+grandmother(X, Y) :-
+    female(X),
+    parent(Z, Y),
+    parent(X, Z).
+
+ancestor(X, Y) :-                % Base case
+    parent(X, Z).
+
+ancestor(X, Y) :-                % Recursive case
+    parent(X, Z),
+    ancestor(Z, Y).
+
+
+
 
 
 
